@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.ant-carousel .slick-prev,
+.ant-carousel .slick-next {
+  color: #1d4ed8;
+}
+
+.ant-carousel .slick-arrow {
+  margin: -20px -40px;
+}
+
+.card-no-border {
+  border: none !important;
+  padding: 0;
+}
+/* donot use thks, effect others antd code */
+/* .anticon svg{
+  color:white;
+} */
+
+/* .ant-input::placeholder{
+  color: white;
+} */
+:where(.css-dev-only-do-not-override-11lehqq).ant-form-item .ant-form-item-label >label {
+  min-width: 130px;
+  margin-left: 5px;
+}
+
+.register-owner label{
+  color: black !important;
+  font-size: large;
+  min-width: 200px  !important ;
+  font-size: 20px !important ;
+}
+
+.login-form, .login-form input::placeholder{
+  color: white;
+}
+
+.login-form svg{
+  color: white;
+}
+
+.ant-form-item-feedback-icon svg{
+  color: green !important;
+}
+
+.ant-form-item-feedback-icon-error svg{
+  color: red !important;
+}
+
+.register-owner svg{
+  color: black;
+}
+
+.ant-notification-notice-close svg{
+  color: black !important;
+}
+.ant-notification-notice{
+  color: red !important;
+}
+
+
+ul{
+  margin: 0!important;
+  padding: 0!important;
+}
+.link-property{
+  text-decoration: none;
+}
+.range-picker-addvoucher svg{
+  color: black !important;
+}
+
+.input-addvoucher::placeholder{
+  color:rgba(0, 0, 0, 0.45) !important
+}
+
+.input-addvoucher input{
+  padding: 0 10px ;
+}
+
+.input-addvoucher input::placeholder{
+  color:rgba(0, 0, 0, 0.45) !important
+
+}
+.gryphen{
+  font-family: gryphen;
+}
+.white-label{
+  color: white!important;
+}
+/* src/App.css or src/index.css */
+html {
+  font-family: 'Poppins', sans-serif; /* Apply Poppins font to the entire HTML */
+}
