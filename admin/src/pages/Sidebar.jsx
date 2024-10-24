@@ -29,17 +29,18 @@ const SidebarItem = ({ icon: Icon, label, to, active, onClick }) => (
 );
 
 const Sidebar = () => {
-  const [activeItem, setActiveItem] = useState("Dashboard");
+  const [activeItem, setActiveItem] = useState(null);
 
   const handleItemClick = (item) => {
     setActiveItem(item);
   };
 
   const manageItems = [
-    { label: "Product", to: "Product", icon: FaCartPlus },
-    { label: "Category", to: "", icon: FaListAlt },
-    { label: "Customer", to: "", icon: FaUser },
-
+    { label: "Sản Phẩm", to: "product", icon: FaCartPlus },
+    { label: "Danh Mục", to: "category", icon: FaListAlt },
+    { label: "Khách Hàng", to: "", icon: FaUser },
+    { label: "Voucher", to: "", icon: FaUser },
+    { label: "Kích Thuớc", to: "", icon: FaUser },
   ];
 
   const addonItems = [

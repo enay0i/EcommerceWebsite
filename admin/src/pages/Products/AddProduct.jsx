@@ -1,74 +1,78 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Form, Input, Button, Select, notification, Row, Col, Spin, Alert } from 'antd';
+import { Form, Input, Button, Select, notification, Row, Col, Spin, Alert, Modal } from 'antd';
 import { useGet } from "../../hook/hook";
 
 const { Option } = Select;
 
-const CreateProduct = () => {
+const CreateProduct = ({ visible, handleCancel, data, header, onFinish, onClose }) => {
+  const { id } = useParams(); 
+  const [form] = Form.useForm();
   const navigate = useNavigate();
   const [errMessage, setErrMessage] = useState('');
-  const { data:size, error:sizeerror, loading:sizeload } = useGet("http://localhost:4000/productList/sizes");
-  const { data:category, error:cateerror, loading:cateload } = useGet("http://localhost:4000/productList/category");
-  if (sizeload||cateload) {
+  const [loadingProduct, setLoadingProduct] = useState(false);
+
+
+  const { data: size, error: sizeerror, loading: sizeload } = useGet("http://localhost:4000/productList/sizes");
+  const { data: category, error: cateerror, loading: cateload } = useGet("http://localhost:4000/productList/category");
+
+
+  useEffect(() => {
+    if (data) {  
+      setLoadingProduct(true);
+      axios
+        .get(`http://localhost:4000/productList/products/${data}`)
+        .then((response) => {
+          const productData = response.data;
+  
+          form.setFieldsValue({
+            ...productData,
+            additionalImages: productData.additionalImages ? productData.additionalImages.join(", ") : "",
+          });
+        })
+        .catch((error) => {
+          setErrMessage('Failed to load product details.');
+        })
+        .finally(() => {
+          setLoadingProduct(false);
+        });
+    } else {
+      form.resetFields(); 
+    }
+  }, [data]);
+  
+
+  if (sizeload || cateload || loadingProduct) {
     return <Spin size="large" style={{ display: "block", margin: "auto" }} />;
   }
 
-  if (sizeerror||cateerror) {
+  if (sizeerror || cateerror) {
     return (
       <Alert
         message="Error"
-        description="Failed to load products."
+        description="Failed to load sizes or categories."
         type="error"
         showIcon
       />
     );
   }
 
-  const onFinish = async (values) => {
-    setErrMessage('');
-    const imgArray = values.additionalImages
-      ? values.additionalImages.split(',').map(image => image.trim())
-      : [];
-
-    try {
-      const response = await axios.post('http://localhost:4000/productList/createProduct', {
-        ...values,
-        additionalImages: imgArray,
-      });
-
-      if (response.data.status === 'OK') {
-        notification.success({
-          message: 'Product Created Successfully',
-          description: 'The product has been created successfully!',
-        });
-        navigate('/product');
-      } else {
-        setErrMessage('Product creation failed!');
-      }
-    } catch (error) {
-      console.error("Error details:", error);
-      const errorMessage = error.response?.data?.message || "An unknown error occurred.";
-      notification.error({
-        message: 'Product Creation Failed',
-        description: errorMessage,
-      });
-      setErrMessage(errorMessage);
-    }
-  };
-
   return (
-    <div className="h-screen w-full flex justify-center">
+    <Modal
+      visible={visible}
+      onCancel={handleCancel}
+      footer={null}
+    >
       <Form
+        form={form}
         labelCol={{ span: 10 }}
         wrapperCol={{ span: 20 }}
         name="createProduct"
         className="py-8 h-auto"
         onFinish={onFinish}
       >
-        <h1 className="text-xl font-bold mb-4 text-orange-600">Thêm sản phẩm</h1>
-
+        <h1 className="text-xl font-bold mb-10 text-orange-600 text-center">{header}</h1>
         {errMessage && <div className="text-red-500">{errMessage}</div>}
         <Row gutter={16}>
           <Col span={12}>
@@ -93,7 +97,7 @@ const CreateProduct = () => {
               name="new_price"
               rules={[{ required: true, message: 'Please input new price!' }]}
             >
-              <Input type="number" placeholder="New Price" />
+              <Input type="number" placeholder="Giá Mới" />
             </Form.Item>
 
             <Form.Item
@@ -124,7 +128,7 @@ const CreateProduct = () => {
             </Form.Item>
           </Col>
           <Col span={12}>
-          <Form.Item
+            <Form.Item
               label={<span className="text-black">Danh mục</span>}
               name="categoryID"
               rules={[{ required: true, message: 'Please select category!' }]}
@@ -137,6 +141,7 @@ const CreateProduct = () => {
                 ))}
               </Select>
             </Form.Item>
+
             <Form.Item
               label={<span className="text-black">Kích Cỡ</span>}
               name="sizeID"
@@ -165,7 +170,7 @@ const CreateProduct = () => {
             <Form.Item
               label={<span className="text-black">Các Ảnh Phụ</span>}
               name="additionalImages"
-              rules={[{ required: false, message: 'Please enter additional images URLs!' }]} // Optional rule
+              rules={[{ required: false, message: 'Please enter additional images URLs!' }]}
             >
               <Input.TextArea placeholder="Comma separated URLs for additional images" />
             </Form.Item>
@@ -178,12 +183,12 @@ const CreateProduct = () => {
               htmlType="submit"
               className="bg-orange-600 hover:bg-orange-400 text-white"
             >
-              Create Product
+              {header}
             </Button>
           </div>
         </Form.Item>
       </Form>
-    </div>
+    </Modal>
   );
 };
 

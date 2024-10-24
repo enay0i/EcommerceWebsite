@@ -1,7 +1,7 @@
 const DB = require("../../model/product.model");
 const express = require("express");
 const ListRouter = express.Router();
-
+const productController = require("../product/productController")
 
 ListRouter.post('/createProduct', async (req, res) => {
     try {
@@ -13,7 +13,6 @@ ListRouter.post('/createProduct', async (req, res) => {
     }
   });
 
-
 ListRouter.get('/products', async (req, res) => {
     try {
         const products = await DB.Product.find();
@@ -24,7 +23,7 @@ ListRouter.get('/products', async (req, res) => {
 });
 ListRouter.get('/products/:id', async (req, res) => {
     try {
-        const product = await DB.Product.find({ id: req.params.id });
+        const product = await DB.Product.findById(req.params.id );
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
@@ -79,4 +78,7 @@ ListRouter.get('/color', async (req, res) => {
         res.status(500).json({ message: e.message });
     }
 });
+
+ListRouter.post('/updateProduct/:id',productController.updateProduct);
+ListRouter.delete('/deleteProduct/:id',productController.deleteProduct);
 module.exports = ListRouter;

@@ -28,7 +28,6 @@ function useGet(link) {
         setError(e);
         console.log(e);
       } finally {
-        //if succ or not
         setLoading(false);
       }
     };
