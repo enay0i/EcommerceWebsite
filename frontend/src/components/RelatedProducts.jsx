@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Spin, Alert } from 'antd';
-import { useGet } from "../hook/hook"; // Adjust path as necessary
+import { useGet } from "../hook/hook"; 
 import ProductItem from './ProductItem';
 import Title from './Title';
 import { Link } from 'react-router-dom';
-const RelatedProducts = ({ category }) => {
+const RelatedProducts = ({ category ,id}) => {
     const { data: products, error: producterror, loading: productload } = useGet("http://localhost:4000/productList/products");
     const [related, setRelated] = useState([]);
 
     useEffect(() => {
         if (products.length > 0 && category) {
-            const filteredProducts = products.filter((item) =>
-                item.categoryID?.includes(category)
-            );
-            setRelated(filteredProducts.slice(0, 5)); 
+            const filteredProducts = products
+                .filter((item) => item.categoryID?.includes(category) && item._id !== id) 
+                .slice(0, 5);
+            setRelated(filteredProducts);
         }
-    }, [products, category]);
+    }, [products, category, id]);
 
     if (productload) {
         return <Spin size="large" style={{ display: "block", margin: "auto" }} />;
@@ -47,12 +47,12 @@ const RelatedProducts = ({ category }) => {
                             id={item._id}
                             name={item.name}
                             price={item.new_price}
-                            image={item.mainImage}
+                            image={item.additionalImages[0]}
                         />
                         </Link>
                     ))
                 ) : (
-                    <p>No related products found.</p>
+                    <p className='text-center'>Hiện chưa có sản phẩm tương tự</p>
                 )}
             </div>
         </div>
