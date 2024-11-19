@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
  import { FaSearch, FaEnvelope, FaRegBell } from "react-icons/fa";
-
+ import logo from '../assets/logo.png'
 import { useNavigate } from "react-router-dom";
 
 
-const DashboardView = () => {
+const DashboardView = ({setToken}) => {
 
   const [open, setOpen] = useState(false);
   const navigate = useNavigate()
@@ -22,9 +22,9 @@ const DashboardView = () => {
           <input
             type="text"
             className=" bg-[#F8F9FC] h-[40px] outline-none pl-[13px] w-[350px] rounded-[5px] placeholder:text-[14px] leading-[20px] font-normal"
-            placeholder="Search for..."
+            placeholder="Tìm kiếm"
           />
-          <div className="bg-[#EE6B6B] h-[40px] px-[14px] flex items-center justify-center cursor-pointer rounded-tr-[5px] rounded-br-[5px]">
+          <div className="bg-[#2e2e2e] h-[40px] px-[14px] flex items-center justify-center cursor-pointer rounded-tr-[5px] rounded-br-[5px]">
             { <FaSearch color="white" /> }
           </div>
         </div>
@@ -37,21 +37,21 @@ const DashboardView = () => {
             className="flex items-center gap-[15px] relative"
             onClick={showProfile}
           >
-            <p className="pt-[10px]">ee</p>
-            <div className="h-[50px] w-[50px] bg-[#EE6B6B] cursor-pointer flex items-center justify-center relative z-40">
-              <img src="/img/profile.png" alt="" />
+            <p className="pt-[10px]"></p>
+            <div className="h-[50px] w-[50px] bg-[#2e2e2e] cursor-pointer flex items-center justify-center relative z-40">
+              <img src={logo} alt="" />
             </div>
 
             {open && (
               <div className="bg-white border h-[120px] w-[150px] absolute bottom-[-135px] z-20 right-0 pt-[10px]  space-y-[10px]">
-                <p className="cursor-pointer hover:text-[blue] font-semibold">
-                  Profile
+                <p className="cursor-pointer hover:text-[gray] font-semibold">
+                  Thông Tin
                 </p>
-                <p className="cursor-pointer hover:text-[blue] font-semibold">
-                  Settings
+                <p className="cursor-pointer hover:text-[gray] font-semibold">
+                  Cài Đặt
                 </p>
-                <p className="cursor-pointer hover:text-[blue] font-semibold" >
-                  Log out
+                <p onClick={()=>setToken('')}className="cursor-pointer hover:text-[gray] font-semibold" >
+                  Đăng xuất
                 </p>
               </div>
             )}

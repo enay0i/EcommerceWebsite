@@ -5,15 +5,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import {Modal} from "antd";
 import { EditOutlined, PlusOutlined, DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
-const ModalDelete = ({ open, onClose, onConfirm }) => {
+const ModalDelete = ({ open, onClose, onConfirm,header }) => {
   return (
-    <Modal open={open} className="justify-center items-center" footer={null} onClose={() => setOpen(false) }>
+    <Modal open={open} className="justify-center items-center" footer={null}  closable={false}>
     <div className="text-center">
   
       <div className="mx-auto my-4 w-48">
-        <h3 className="text-lg font-black text-orange-600">Xóa Sản Phẩm</h3>
+        <h3 className="text-lg font-black text-gray-600">Xóa {header}</h3>
         <p className="text-sm text-gray-500">
-          Bạn có chắc là muốn xóa sản phẩm này chứ ?
+          Bạn có chắc là muốn xóa {header} này chứ ?
         </p>
       </div>
       <div className="flex gap-4 items-center justify-center">

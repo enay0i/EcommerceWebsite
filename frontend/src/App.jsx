@@ -1,5 +1,5 @@
-import React from 'react'
-import { Routes,Route } from 'react-router-dom'
+import React,{useEffect,useState} from 'react'
+import { Routes,Route,Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import Collection from './pages/Collection'
 import About from './pages/About'
@@ -13,10 +13,14 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import SearchBar from './components/SearchBar'
 import { ToastContainer, toast } from 'react-toastify';
+import Verify from './pages/Verify'
 import 'react-toastify/dist/ReactToastify.css';
+import CusInfor from './pages/CusInfor'
 
 
 const App = () => {
+  const [token, setToken] = useState(localStorage.getItem('token') || '');
+
   return (
     <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
        <ToastContainer  />
@@ -30,8 +34,13 @@ const App = () => {
           <Route path='/product/:id' element={<Product/>} />   
           <Route path='/cart' element={<Cart/>} />
           <Route path='/login' element={<Login/>} />
-          <Route path='/place-order' element={<PlaceOrder/>} /> 
-          <Route path='/orders' element={<Orders/>} />       
+          {token === "" ? (
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          ) : (
+          <Route path='/place-order' element={<PlaceOrder token={token} />} /> )}
+          <Route path='/orders' element={<Orders/>} />     
+          <Route path='/verify' element={<Verify/>} />  
+          <Route path='/information' element={<CusInfor/>}/>
         </Routes>
         <Footer />
     </div>
